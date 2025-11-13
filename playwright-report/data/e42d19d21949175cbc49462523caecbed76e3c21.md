@@ -1,0 +1,42 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "Catre pagina principala" [ref=e9] [cursor=pointer]:
+        - /url: /
+    - status [ref=e10]
+    - main [ref=e11]:
+      - generic [ref=e28]:
+        - heading "Buna ziua!" [level=2] [ref=e29]
+        - generic [ref=e30]: Logheaza-te sau creeaza un cont cu adresa de email sau numarul de telefon
+        - generic [ref=e31]:
+          - generic [ref=e34]:
+            - generic [ref=e35]: Adresa de e-mail sau numarul de telefon
+            - textbox "Adresa de e-mail sau numarul de telefon" [active] [ref=e37]:
+              - /placeholder: ""
+          - generic [ref=e39]:
+            - text: Citeste
+            - link "politica de confidentialitate" [ref=e40] [cursor=pointer]:
+              - /url: /confidentialitate
+          - button "Continua" [ref=e42]:
+            - generic [ref=e44]: Continua
+  - iframe [ref=e49]:
+    - generic [ref=f1e2]:
+      - generic [ref=f1e5]:
+        - link "Privacy" [ref=f1e6] [cursor=pointer]:
+          - /url: https://www.google.com/intl/en/policies/privacy/
+        - text: "-"
+        - link "Terms" [ref=f1e7] [cursor=pointer]:
+          - /url: https://www.google.com/intl/en/policies/terms/
+      - generic [ref=f1e8]:
+        - generic [ref=f1e9]:
+          - text: protected by
+          - strong [ref=f1e10]: reCAPTCHA
+        - generic [ref=f1e12]:
+          - text: reCAPTCHA is changing its terms of service.
+          - link "Take action." [ref=f1e13] [cursor=pointer]:
+            - /url: https://google.com/recaptcha/admin/migrate
+        - generic [ref=f1e14]: "-"
+```

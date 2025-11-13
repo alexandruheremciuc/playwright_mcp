@@ -1,0 +1,19 @@
+{
+  "// PROMPT": "You are my pair-programmer. Build a minimal, clean Playwright + TypeScript test automation framework using Page Object Model (POM) that meets the assignment…",
+  "name": "mega-image-pw-ts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "PWDEBUG=1 playwright test",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.2",
+    "typescript": "^5.6.3"
+  }
+}
+
+
