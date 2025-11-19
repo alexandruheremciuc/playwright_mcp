@@ -17,3 +17,8 @@ export function byText(page: Page, text: string): Locator {
 export function byCss(page: Page, css: string): Locator {
 	return page.locator(css);
 }
+export function byXpath(page: Page, xpath: string): Locator {
+	return page.locator(xpath);
+}
+
+

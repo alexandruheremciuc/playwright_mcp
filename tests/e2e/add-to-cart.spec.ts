@@ -34,9 +34,12 @@ test('E2E: add two items, verify count, names, and total', async ({ page }) => {
 	const nameB = (await products.productNameIn(cards.nth(1)).textContent())?.trim() || '';
 	expect(nameB).not.toBe('');
 
-	// Add two items
-	await products.addProductByName(nameA);
-	await products.addProductByName(nameB);
+	// Add two items by index (more reliable than filtering by name)
+	await products.addProductByIndex(0);
+	await page.waitForTimeout(1000); // Wait between additions
+	
+	await products.addProductByIndex(1);
+	await page.waitForTimeout(2000); // Wait for cart to fully update
 
 	// Go to cart
 	await products.openCart();

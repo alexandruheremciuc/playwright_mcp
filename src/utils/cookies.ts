@@ -39,7 +39,6 @@ export async function dismissCookiesIfPresent(page: Page): Promise<void> {
 		}
 	} catch (e) {
 		// Cookie popup might not be present, which is fine
-		console.log('No cookie popup found or dismissed');
 	}
 }
 

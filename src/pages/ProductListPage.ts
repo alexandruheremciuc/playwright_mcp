@@ -1,6 +1,7 @@
 // PROMPT: Initial structure and E2E test generated with AI assistance
 // TODO: Replace fallbacks with site-specific data-testid where available.
 import { Page, Locator, expect } from '@playwright/test';
+import { byRole, byCss } from '../utils/selectors';
 
 export class ProductListPage {
 	constructor(private readonly page: Page) {}
@@ -22,11 +23,7 @@ export class ProductListPage {
 
 	addButtonIn(card: Locator): Locator {
 		// mega-image.ro add to cart button - try multiple selectors
-		const byTestId = card.locator('[data-testid="add-to-cart"], [data-testid="add-button"]');
-		const byRoleBtn = card.getByRole('button', { name: /adauga|adăuga/i });
-		const byText = card.locator('button:has-text("Adauga"), button:has-text("Adăuga")');
-		const fallback = card.locator('button').filter({ hasText: /adauga/i }).first();
-		return byTestId.or(byRoleBtn).or(byText).or(fallback).first();
+		return card.locator('[aria-label="Adauga in cos"]');
 	}
 
 	async addProductByName(name: string): Promise<void> {
@@ -46,33 +43,42 @@ export class ProductListPage {
 		await this.page.waitForTimeout(500);
 	}
 
-	async openCart(): Promise<void> {
-		// mega-image.ro cart link selectors - try multiple approaches
-		const cartSelectors = [
-			'[data-testid="cart"]',
-			'[data-testid="cart-icon"]',
-			'a[href*="cart"]',
-			'a[href*="cos"]',
-			'a[href*="basket"]',
-			'button[aria-label*="cart"]',
-			'button[aria-label*="cos"]'
-		];
+	async addProductByIndex(index: number): Promise<void> {
+		const cards = this.productCards();
+		const card = cards.nth(index);
+		await expect(card, `Product at index ${index} should be visible`).toBeVisible({ timeout: 10000 });
 		
-		let cartLink = this.page.locator(cartSelectors.join(', ')).first();
+		// Scroll product into view before clicking
+		await card.scrollIntoViewIfNeeded();
+		await this.page.waitForTimeout(300); // Brief wait for scroll
 		
-		// Try role-based as fallback
-		try {
-			const roleLink = this.page.getByRole('link', { name: /cos|cart|basket/i });
-			if (await roleLink.isVisible({ timeout: 1000 }).catch(() => false)) {
-				cartLink = roleLink.first();
-			}
-		} catch (e) {
-			// Continue with CSS selector
+		// Wait for add button to be visible and clickable
+		const addButton = this.addButtonIn(card);
+		await expect(addButton, `Add button at index ${index} should be visible`).toBeVisible({ timeout: 5000 });
+		
+		// Check if button is enabled
+		const isEnabled = await addButton.isEnabled().catch(() => false);
+		if (!isEnabled) {
+			throw new Error(`Add button at index ${index} is disabled`);
 		}
 		
-		await expect(cartLink, 'Cart link should be visible').toBeVisible({ timeout: 5000 });
-		await cartLink.click();
-		await this.page.waitForTimeout(500); // Wait for navigation
+		await addButton.click({ force: false });
+		
+		// Wait for cart to update
+		await this.page.waitForTimeout(1000);
+	}
+
+	async openCart(): Promise<void> {
+		// Find cart icon/button - try multiple approaches
+		// Check if header/nav cart exists first
+		const headerCart = this.page.locator('//a[contains(@aria-label,"Vezi coșul tău")]');
+		
+		await expect(headerCart, 'Cart button/link should be visible').toBeVisible({ timeout: 5000 });
+		await headerCart.click();
+		
+		// Wait for navigation to cart page
+		await this.page.waitForURL(/cos|cart/i, { timeout: 5000 }).catch(() => {});
+		await this.page.waitForTimeout(1000); // Brief wait for cart to load
 	}
 }
 
